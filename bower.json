@@ -1,0 +1,23 @@
+{
+  "name": "fdysart.com",
+  "homepage": "https://github.com/ftdysa/website",
+  "authors": [
+    "Fred Dysart <ftdysa@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "None",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5.0"
+  }
+}

@@ -1,1 +1,7 @@
 vendor/
+bower_components/
+node_modules/
+
+web/fonts/
+web/css/
+web/js/
