@@ -1,6 +1,13 @@
 var gulp = require('gulp');
 var less = require('gulp-less');
 
+var config = {
+    js_paths: [
+        'bower_components/bootstrap/dist/js/bootstrap.min.js',
+        'src/Resources/js/featherlight.js'
+    ],
+}
+
 gulp.task('less', function() {
     return gulp.src('src/Resources/less/site.less')
         .pipe(less())
@@ -8,7 +15,7 @@ gulp.task('less', function() {
 });
 
 gulp.task('copy-js', function() {
-   return gulp.src('bower_components/bootstrap/dist/js/bootstrap.min.js')
+   return gulp.src(config.js_paths)
        .pipe(gulp.dest('web/js'));
 });
 
