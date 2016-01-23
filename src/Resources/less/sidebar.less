@@ -1,0 +1,29 @@
+.sidebar {
+  .make-md-column(3);
+
+  .sidebar-menu {
+    background-color: #fff;
+    padding-left: 0;
+
+    .sidebar-menu-item {
+      color: @blue;
+      font-weight: bold;
+      position: relative;
+      display: block;
+      padding: 10px 15px;
+      margin-bottom: -1px;
+
+      &:first-child {
+        .border-top-radius(4px);
+      }
+      &:last-child {
+        margin-bottom: 0;
+        .border-bottom-radius(4px);
+      }
+
+      &:hover, &.active {
+        background-color: fade(@blue, 10%);
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.header {
+  .container-fixed();
+  width: @container-lg;
+  .clearfix();
+
+  .brand {
+    display: inline-block;
+
+    a {
+      font-size: @font-size-h1;
+      font-family: @headings-font-family;
+      font-weight: bold;
+      color: #000;
+      text-decoration: none;
+
+      &:hover {
+        color: @blue;
+      }
+    }
+  }
+
+  .links {
+    margin-left: 20px;
+    display: inline-block;
+
+    a {
+      font-family: @headings-font-family;
+      font-size: 16px;
+      font-weight: bold;
+      color: #a8a8a8;
+      text-decoration: none;
+
+      &:hover {
+        color: @blue;
+      }
+    }
+  }
+}
