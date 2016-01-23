@@ -21,8 +21,6 @@ $app->get('/about', function() use ($app) {
     return $app['twig']->render('about.html.twig');
 });
 
-$app->get('/photos', function() use ($app) {
-    return $app['twig']->render('photos.html.twig');
-});
+$app->get('/photos', 'Ftdysa\Website\Controller\PhotoController::processAction');
 
 $app->run();

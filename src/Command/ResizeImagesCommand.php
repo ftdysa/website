@@ -2,7 +2,8 @@
 
 namespace Ftdysa\Website\Command;
 
-use Intervention\Image\Image;
+use Ftdysa\Website\Image;
+use Intervention\Image\Image as ImageManipulator;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -13,16 +14,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class ResizeImagesCommand extends Command {
-    private $thumb_suffix;
-
-    public function setThumbSuffix($suffix) {
-        $this->thumb_suffix = $suffix;
-    }
-
-    public function getThumbSuffix() {
-        return $this->thumb_suffix;
-    }
-
     protected function configure() {
         $this
             ->setName('resize')
@@ -71,8 +62,6 @@ class ResizeImagesCommand extends Command {
         $h = $input->getOption('height');
         $w = $input->getOption('width');
 
-        $this->setThumbSuffix(sprintf('-%sx%s', $h, $w));
-
         $errors = [];
         if (!file_exists($src)) {
             $errors[] = sprintf('Source directory: %s does not exist.', $src);
@@ -95,32 +84,36 @@ class ResizeImagesCommand extends Command {
         $finder = new Finder();
         $finder->files()->in($src);
 
-        $thumbs = $this->getProcessedThumbs($dst);
         $manager = new ImageManager(['driver' => 'gd']);
         $rows = [];
 
         foreach ($finder as $file) {
             $relative_path = $this->getRelativePath($src, $file);
-            if (isset($thumbs[$relative_path])) {
+            $thumb_name = Image::createFromFile($file, $relative_path)
+                ->getThumbnailName($w, $h);
+            $thumb_path = $dst.$thumb_name;
+
+            if (file_exists($thumb_path)) {
                 $rows[] = [
                     '<error>Skipped</error>',
                     $file->getRealpath(),
-                    $thumbs[$relative_path]
+                    $thumb_path
                 ];
                 continue;
             }
 
             $image = $manager->make($file->getRealpath());
-            $callback = function ($constraint) { $constraint->upsize(); };
-            $image->widen($w, $callback)->heighten($h, $callback);
+            $image->resize($w, $h, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
 
-            $dst_path = $this->makeThumbPath($src, $dst, $file);
-            $wrote = $this->writeThumb($dst_path, $image);
+            $wrote = $this->writeThumb($thumb_path, $image);
             if (!$wrote) {
-                $output->writeln(sprintf('<error>%s</error>', 'Could not write '.$dst_path));
+                $output->writeln(sprintf('<error>%s</error>', 'Could not write '.$thumb_path));
             }
 
-            $rows[] = ['<info>Processed</info>', $file->getRealpath(), $dst_path];
+            $rows[] = ['<info>Processed</info>', $file->getRealpath(), $thumb_path];
         }
 
         $table = new Table($output);
@@ -129,23 +122,15 @@ class ResizeImagesCommand extends Command {
         $table->render();
     }
 
-    private function makeThumbPath($src, $dst, SplFileInfo $file) {
-        $name_without_ext = $file->getBasename('.'.$file->getExtension());
-        $thumb_filename = $name_without_ext.$this->getThumbSuffix().'.'.$file->getExtension();
-        $relative_path = str_replace($src, $dst, $file->getPath());
-
-        return $relative_path.'/'.$thumb_filename;
-    }
-
     /**
-     * Write the resized image to the destination path,
+     * Write the re-sized image to the destination path,
      * creating any relative directories necessary.
      *
      * @param $dst_path
-     * @param Image $image
+     * @param ImageManipulator $image
      * @return bool|Image
      */
-    private function writeThumb($dst_path, Image $image) {
+    private function writeThumb($dst_path, ImageManipulator $image) {
         $parts = explode('/', $dst_path);
         array_pop($parts);
         $path = implode('/', $parts);
@@ -168,43 +153,13 @@ class ResizeImagesCommand extends Command {
      *
      * @param $path
      * @param SplFileInfo $file
-     * @param bool $thumb
      * @return mixed
      */
-    private function getRelativePath($path, SplFileInfo $file, $thumb = true) {
-        if ($thumb) {
-            return str_replace(
-                [$path, $this->getThumbSuffix()],
-                ['', ''],
-                $file->getPathname()
-            );
-        }
-
+    private function getRelativePath($path, SplFileInfo $file) {
         return str_replace(
             $path,
             '',
-            $file->getPathname()
+            $file->getPath()
         );
-    }
-
-    /**
-     * Return a map of file paths that have already had a thumbnail created.
-     *
-     * @param $dst
-     *
-     * @return array
-     */
-    private function getProcessedThumbs($dst) {
-        $finder = new Finder();
-        $finder->files()->in($dst);
-
-        $thumbs = [];
-        foreach ($finder as $image) {
-            $orig_relative_path = $this->getRelativePath($dst, $image, true);
-
-            $thumbs[$orig_relative_path] = $image->getRealPath();
-        }
-
-        return $thumbs;
     }
 }

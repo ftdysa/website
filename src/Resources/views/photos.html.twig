@@ -8,13 +8,19 @@
                 <li>Thailand</li>
                 <li>Cambodia</li>
                 <li>Laos</li>
-                <li>Vietname</li>
+                <li>Vietnam</li>
                 <li>Snowboarding</li>
             </ul>
         </div>
     </div>
     <div class="row">
-
+        {% for photo in photos %}
+            <div class="main-img-container">
+                <a href="{{ photo.displayName }}" class="thumbnail" data-featherlight="image">
+                    <img src="{{ photo.thumbnail }}" height="180px" />
+                </a>
+            </div>
+        {% endfor %}
         {% for i in 0..20 %}
             <div class="main-img-container">
                 <a href="#" class="thumbnail">
