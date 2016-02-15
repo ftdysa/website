@@ -70,6 +70,15 @@ EOS;
     public static function getCache() {
         return self::\$cache;
     }
+
+    public static function getImages() {
+        \$photos = [];
+        foreach (self::\$cache as \$file => \$relative_path) {
+            \$photos[] = new Image(\$file, \$relative_path);
+        }
+
+        return \$photos;
+    }
 }
 EOS;
         return $template;

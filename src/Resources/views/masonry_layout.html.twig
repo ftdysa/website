@@ -1,0 +1,22 @@
+<div class="grid">
+    <div class="grid-sizer"></div>
+    {% for photo in photos %}
+        <div class="grid-item">
+            <a href="{{ photo.displayName }}" class="grid-item-content" data-featherlight="image">
+                <img src="{{ photo.thumbnail }}" />
+            </a>
+        </div>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    var $grid = $('.grid').masonry({
+        itemSelector: '.grid-item',
+        percentPosition: true,
+        columnWidth: '.grid-sizer'
+    });
+    $grid.imagesLoaded().progress( function() {
+        $grid.masonry('layout');
+    });
+
+</script>

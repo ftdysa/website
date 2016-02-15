@@ -1,32 +1,5 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="page-heading">Photos</h1>
-            <ul class="list-inline">
-                <li>Thailand</li>
-                <li>Cambodia</li>
-                <li>Laos</li>
-                <li>Vietnam</li>
-                <li>Snowboarding</li>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        {% for photo in photos %}
-            <div class="main-img-container">
-                <a href="{{ photo.displayName }}" class="thumbnail" data-featherlight="image">
-                    <img src="{{ photo.thumbnail }}" height="180px" />
-                </a>
-            </div>
-        {% endfor %}
-        {% for i in 0..20 %}
-            <div class="main-img-container">
-                <a href="#" class="thumbnail">
-                    <div class="placeholder-img-full"></div>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
-{% endblock %}
+{% include 'masonry_layout.html.twig' with { photos: photos } %}
+{% endblock content %}

@@ -11,3 +11,5 @@ web/resume.pdf
 
 // cache
 src/ImageCache.php
+src/Resources/thumbs
+src/Resources/images

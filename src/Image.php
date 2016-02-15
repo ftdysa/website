@@ -48,7 +48,7 @@ class Image extends \SplFileInfo {
      * @param int $h
      * @return string
      */
-    public function getThumbnailName($w = 245, $h = 180) {
+    public function getThumbnailName($w = 370, $h = 200) {
         return ImageHelper::createThumbnailName($this, $w, $h);
     }
 
@@ -59,7 +59,7 @@ class Image extends \SplFileInfo {
      * @param int $h
      * @return string
      */
-    public function getThumbnail($w = 245, $h = 180) {
+    public function getThumbnail($w = 370, $h = 200) {
         return ImageHelper::THUMB_PATH.$this->getThumbnailName($w, $h);
     }
 }

@@ -13,9 +13,7 @@ $app->register(new TwigServiceProvider(), [
     'twig.path' => __DIR__ . '/../src/Resources/views'
 ]);
 
-$app->get('/', function() use ($app) {
-    return $app['twig']->render('home.html.twig');
-});
+$app->get('/', 'Ftdysa\Website\Controller\HomeController::processAction');
 
 $app->get('/about', function() use ($app) {
     return $app['twig']->render('about.html.twig');

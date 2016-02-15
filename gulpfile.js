@@ -4,7 +4,9 @@ var less = require('gulp-less');
 var config = {
     js_paths: [
         'bower_components/bootstrap/dist/js/bootstrap.min.js',
-        'src/Resources/js/featherlight.js'
+        'src/Resources/js/featherlight.js',
+        'src/Resources/js/masonry.pkgd.min.js',
+        'src/Resources/js/imagesloaded.pkgd.min.js'
     ],
 }
 

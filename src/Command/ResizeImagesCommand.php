@@ -103,10 +103,7 @@ class ResizeImagesCommand extends Command {
             }
 
             $image = $manager->make($file->getRealpath());
-            $image->resize($w, $h, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
+            $image->widen($w);
 
             $wrote = $this->writeThumb($thumb_path, $image);
             if (!$wrote) {
